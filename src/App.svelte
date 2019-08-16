@@ -1,74 +1,75 @@
 <script>
-  import _ from "lodash";
-  import { afterUpdate, tick, beforeUpdate, onDestroy } from "svelte";
-  import Hare from "./Hare.svelte";
-  import Krishna from "./Krishna.svelte";
-  import Rama from "./Rama.svelte";
+  import { afterUpdate, tick, beforeUpdate, onDestroy, onMount } from "svelte";
+
+  import {
+    isKrishnaOrder,
+    isMantraEnd,
+    isRamaOrder,
+    isStrEnd
+  } from "./predicates.js";
+  import HolyName from "./HolyName.svelte";
+
+  let rounds = 16;
+  let roundsCounter = 0;
+  let timeForRound = 7 * 60;
+  let mantrasInRound = 108;
+  let timeForMantra = timeForRound / mantrasInRound;
+  let wordsInMantra = 16;
+  let wordsInterval = timeForMantra / wordsInMantra;
+  let delays = [];
+
+  let mainIntervalId;
   let timer = 0;
+  let wordCounter = 0;
   // function timerTick() {
   //   timer = timer + 1;
   //   // timer = new Date().toLocaleTimeString();
   // }
   // const intervalId = setInterval(timerTick, 1000);
-  const ordersForKrishna = [1, 3, 4, 5];
-  function isKrishnaOrder(ind) {
-    return ordersForKrishna.includes(ind);
-  }
-  const ordersForRama = [9, 11, 12, 13];
-  function isRamaOrder(ind) {
-    return ordersForRama.includes(ind);
-  }
-  const ends = _.range(1, 16, 2);
-  function isStrEnd(ind) {
-    return ends.includes(ind);
-  }
-  function isMantraEnd(wordNum) {
-    if (wordNum % 16 === 0) {
-      return true;
-    }
-    return false;
-  }
-  let wordCounter = 0;
-  let rounds = 16;
-  let roundsCounter = 0;
-  let timeForRound = 7 * 60;
-  let timeForOne = timeForRound / 108;
-  let delayStep = timeForOne / 16;
-  // let delays = _.range(0, timeForOne, delayStep);
-  let delays = [];
-  let wordIntervalId = setInterval(async () => {
-    // await tick();
+
+  function addWord() {
     if (wordCounter && wordCounter % 16 === 0) {
-      delays = []
-      // clearInterval(wordIntervalId);
-      // return;
+      clearScreen();
     }
     delays = [...delays, 0];
     wordCounter += 1;
-  }, delayStep * 1000);
+  }
   function clearScreen() {
     delays = [];
   }
-  // afterUpdate(async () => {
-  //   await tick();
-  //   // if (isMantraEnd(wordCounter)) {
-  //   //   clearScreen()
-  //   // }
-  // });
-  onDestroy(() => {
-    clearInterval(wordIntervalId);
+  function start() {
+    mainIntervalId = setInterval(addWord, wordsInterval * 1000);
+  }
+  onMount(() => {
+    start();
   });
+  onDestroy(() => {
+    clearInterval(mainIntervalId);
+  });
+  function handleKeydown(event) {
+    console.log(event);
+    switch (event.code) {
+      case "KeyF":
+        clearInterval(mainIntervalId);
+        break;
+      case "KeyS":
+        start();
+      default:
+        return;
+    }
+  }
 </script>
 
+<svelte:body on:keydown={handleKeydown} />
 <main>
   <!-- <div>{timer}</div> -->
   {#each delays as delay, i}
     {#if isKrishnaOrder(i)}
-      <Krishna {delay} />
+      <HolyName name="Krishna" />
     {:else if isRamaOrder(i)}
-      <Rama {delay} />
+      <HolyName name="Rama" />
     {:else}
-      <Hare {delay} />
+      <HolyName name="Hare" />
     {/if}
     {#if isStrEnd(i)}
       <br />
