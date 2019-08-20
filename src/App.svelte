@@ -10,16 +10,17 @@
   import HolyName from "./HolyName.svelte";
 
   let rounds = 16;
-  let roundsCounter = 0;
   let timeForRound = 7 * 60;
   let mantrasInRound = 108;
   let timeForMantra = timeForRound / mantrasInRound;
   let wordsInMantra = 16;
-  let wordsInterval = timeForMantra / wordsInMantra;
-  let delays = [];
+  let wordsDelay = timeForMantra / wordsInMantra;
+  let words = [];
 
   let mainIntervalId;
   let timer = 0;
+  let roundCounter = 0;
+  let mantraCounter = 0;
   let wordCounter = 0;
   // function timerTick() {
   //   timer = timer + 1;
@@ -30,15 +31,25 @@
   function addWord() {
     if (wordCounter && wordCounter % 16 === 0) {
       clearScreen();
+      mantraCounter += 1;
     }
-    delays = [...delays, 0];
+    if (mantraCounter && mantraCounter % 108 === 0) {
+      roundCounter += 1;
+    }
+    words = [...words, 0];
     wordCounter += 1;
   }
   function clearScreen() {
-    delays = [];
+    words = [];
   }
   function start() {
-    mainIntervalId = setInterval(addWord, wordsInterval * 1000);
+    if (mainIntervalId) return;
+    mainIntervalId = setInterval(addWord, wordsDelay * 1000);
+  }
+  function finish() {
+    if (!mainIntervalId) return;
+    clearInterval(mainIntervalId);
+    mainIntervalId = null;
   }
   onMount(() => {
     start();
@@ -47,13 +58,13 @@
     clearInterval(mainIntervalId);
   });
   function handleKeydown(event) {
-    console.log(event);
     switch (event.code) {
       case "KeyF":
-        clearInterval(mainIntervalId);
+        finish();
         break;
       case "KeyS":
         start();
+        break;
       default:
         return;
     }
@@ -62,8 +73,8 @@
 
 <svelte:body on:keydown={handleKeydown} />
 <main>
-  <!-- <div>{timer}</div> -->
-  {#each delays as delay, i}
+  <div>Rounds: {roundCounter}</div>
+  {#each words as delay, i}
     {#if isKrishnaOrder(i)}
       <HolyName name="Krishna" />
     {:else if isRamaOrder(i)}
