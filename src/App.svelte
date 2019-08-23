@@ -83,9 +83,6 @@
 
 <svelte:body on:keydown={handleKeydown} />
 <main>
-  <div>Rounds: {roundCounter}</div>
-  <div>Mantras: {mantraCounter}</div>
-
   <label for="rounds">
     Number of rounds
     <input id="rounds" type="number" bind:value={rounds} min="1" />
@@ -95,6 +92,8 @@
     Time for one round in minutes
     <input id="timeForRound" type="number" bind:value={timeForRoundInMin} />
   </label>
+  <div>Rounds: {roundCounter}</div>
+  <!-- <div>Mantras: {mantraCounter}</div> -->
 
   <button type="button" on:click={start}>Start</button>
   <button type="button" on:click={finish}>Finish</button>

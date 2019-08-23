@@ -17497,7 +17497,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (107:4) {:else}
+    // (106:4) {:else}
     function create_else_block(ctx) {
     	var current;
 
@@ -17531,7 +17531,7 @@ var app = (function () {
     	};
     }
 
-    // (105:29) 
+    // (104:29) 
     function create_if_block_2(ctx) {
     	var current;
 
@@ -17565,7 +17565,7 @@ var app = (function () {
     	};
     }
 
-    // (103:4) {#if isKrishnaOrder(i)}
+    // (102:4) {#if isKrishnaOrder(i)}
     function create_if_block_1(ctx) {
     	var current;
 
@@ -17602,14 +17602,14 @@ var app = (function () {
     	};
     }
 
-    // (110:4) {#if isStrEnd(i)}
+    // (109:4) {#if isStrEnd(i)}
     function create_if_block(ctx) {
     	var br;
 
     	return {
     		c: function create() {
     			br = element("br");
-    			add_location(br, file$1, 110, 6, 2353);
+    			add_location(br, file$1, 109, 6, 2361);
     		},
 
     		m: function mount(target, anchor) {
@@ -17624,7 +17624,7 @@ var app = (function () {
     	};
     }
 
-    // (102:2) {#each words as delay, i}
+    // (101:2) {#each words as delay, i}
     function create_each_block(ctx) {
     	var current_block_type_index, if_block0, t, if_block1_anchor, current;
 
@@ -17722,7 +17722,7 @@ var app = (function () {
     }
 
     function create_fragment$1(ctx) {
-    	var t0, main, div0, t1, t2, t3, div1, t4, t5, t6, label0, t7, input0, t8, label1, t9, input1, t10, button0, t12, button1, t14, br, t15, current, dispose;
+    	var t0, main, label0, t1, input0, t2, label1, t3, input1, t4, div, t5, t6, t7, button0, t9, button1, t11, br, t12, current, dispose;
 
     	document.body.addEventListener("keydown", ctx.handleKeydown);
 
@@ -17742,52 +17742,47 @@ var app = (function () {
     		c: function create() {
     			t0 = space();
     			main = element("main");
-    			div0 = element("div");
-    			t1 = text("Rounds: ");
-    			t2 = text(ctx.roundCounter);
-    			t3 = space();
-    			div1 = element("div");
-    			t4 = text("Mantras: ");
-    			t5 = text(ctx.mantraCounter);
-    			t6 = space();
     			label0 = element("label");
-    			t7 = text("Number of rounds\n    ");
+    			t1 = text("Number of rounds\n    ");
     			input0 = element("input");
-    			t8 = space();
+    			t2 = space();
     			label1 = element("label");
-    			t9 = text("Time for one round in minutes\n    ");
+    			t3 = text("Time for one round in minutes\n    ");
     			input1 = element("input");
-    			t10 = space();
+    			t4 = space();
+    			div = element("div");
+    			t5 = text("Rounds: ");
+    			t6 = text(ctx.roundCounter);
+    			t7 = space();
     			button0 = element("button");
     			button0.textContent = "Start";
-    			t12 = space();
+    			t9 = space();
     			button1 = element("button");
     			button1.textContent = "Finish";
-    			t14 = space();
+    			t11 = space();
     			br = element("br");
-    			t15 = space();
+    			t12 = space();
 
     			for (var i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
-    			add_location(div0, file$1, 85, 2, 1651);
-    			add_location(div1, file$1, 86, 2, 1687);
     			attr(input0, "id", "rounds");
     			attr(input0, "type", "number");
     			attr(input0, "min", "1");
-    			add_location(input0, file$1, 90, 4, 1772);
+    			add_location(input0, file$1, 87, 4, 1697);
     			attr(label0, "for", "rounds");
-    			add_location(label0, file$1, 88, 2, 1726);
+    			add_location(label0, file$1, 85, 2, 1651);
     			attr(input1, "id", "timeForRound");
     			attr(input1, "type", "number");
-    			add_location(input1, file$1, 95, 4, 1915);
+    			add_location(input1, file$1, 92, 4, 1840);
     			attr(label1, "for", "timeForRound");
-    			add_location(label1, file$1, 93, 2, 1850);
+    			add_location(label1, file$1, 90, 2, 1775);
+    			add_location(div, file$1, 94, 2, 1926);
     			attr(button0, "type", "button");
-    			add_location(button0, file$1, 98, 2, 2002);
+    			add_location(button0, file$1, 97, 2, 2010);
     			attr(button1, "type", "button");
-    			add_location(button1, file$1, 99, 2, 2058);
-    			add_location(br, file$1, 100, 2, 2116);
+    			add_location(button1, file$1, 98, 2, 2066);
+    			add_location(br, file$1, 99, 2, 2124);
     			add_location(main, file$1, 84, 0, 1642);
 
     			dispose = [
@@ -17805,34 +17800,30 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert(target, t0, anchor);
     			insert(target, main, anchor);
-    			append(main, div0);
-    			append(div0, t1);
-    			append(div0, t2);
-    			append(main, t3);
-    			append(main, div1);
-    			append(div1, t4);
-    			append(div1, t5);
-    			append(main, t6);
     			append(main, label0);
-    			append(label0, t7);
+    			append(label0, t1);
     			append(label0, input0);
 
     			input0.value = ctx.rounds;
 
-    			append(main, t8);
+    			append(main, t2);
     			append(main, label1);
-    			append(label1, t9);
+    			append(label1, t3);
     			append(label1, input1);
 
     			input1.value = ctx.timeForRoundInMin;
 
-    			append(main, t10);
+    			append(main, t4);
+    			append(main, div);
+    			append(div, t5);
+    			append(div, t6);
+    			append(main, t7);
     			append(main, button0);
-    			append(main, t12);
+    			append(main, t9);
     			append(main, button1);
-    			append(main, t14);
+    			append(main, t11);
     			append(main, br);
-    			append(main, t15);
+    			append(main, t12);
 
     			for (var i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].m(main, null);
@@ -17842,16 +17833,12 @@ var app = (function () {
     		},
 
     		p: function update(changed, ctx) {
-    			if (!current || changed.roundCounter) {
-    				set_data(t2, ctx.roundCounter);
-    			}
-
-    			if (!current || changed.mantraCounter) {
-    				set_data(t5, ctx.mantraCounter);
-    			}
-
     			if (changed.rounds) input0.value = ctx.rounds;
     			if (changed.timeForRoundInMin) input1.value = ctx.timeForRoundInMin;
+
+    			if (!current || changed.roundCounter) {
+    				set_data(t6, ctx.roundCounter);
+    			}
 
     			if (changed.isStrEnd || changed.isKrishnaOrder || changed.isRamaOrder || changed.words) {
     				each_value = ctx.words;
@@ -17991,7 +17978,6 @@ var app = (function () {
     		timeForRoundInMin,
     		words,
     		roundCounter,
-    		mantraCounter,
     		start,
     		finish,
     		handleKeydown,
