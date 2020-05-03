@@ -6,57 +6,67 @@
     isMantraEnd,
     isRamaOrder,
     isStrEnd
-  } from "./predicates.js";
+  } from "./predicates";
+  import {
+    SECONDS_IN_MINUTE,
+    MANTRAS_IN_ROUND,
+    WORDS_IN_MANTRA
+  } from "./constants";
   import HolyName from "./HolyName.svelte";
 
   let rounds = 16;
-  let timeForRound = 7 * 60;
-  let mantrasInRound = 108;
-  let timeForMantra = timeForRound / mantrasInRound;
-  let wordsInMantra = 16;
-  let wordsDelay = timeForMantra / wordsInMantra;
+  let timeForRoundInMin = 6;
+
+  $: timeForRoundInSec = timeForRoundInMin * SECONDS_IN_MINUTE;
+  $: timeForMantra = timeForRoundInSec / MANTRAS_IN_ROUND;
+  $: wordsDelay = timeForMantra / WORDS_IN_MANTRA;
+
   let words = [];
 
   let mainIntervalId;
-  let timer = 0;
   let roundCounter = 0;
   let mantraCounter = 0;
   let wordCounter = 0;
-  // function timerTick() {
-  //   timer = timer + 1;
-  //   // timer = new Date().toLocaleTimeString();
-  // }
-  // const intervalId = setInterval(timerTick, 1000);
+
+  $: if (mantraCounter && mantraCounter % 108 === 0) {
+    mantraCounter = 0;
+    roundCounter += 1;
+  }
+
+  $: if (roundCounter === rounds) finish();
 
   function addWord() {
     if (wordCounter && wordCounter % 16 === 0) {
       clearScreen();
+      wordCounter = 0;
       mantraCounter += 1;
-    }
-    if (mantraCounter && mantraCounter % 108 === 0) {
-      roundCounter += 1;
     }
     words = [...words, 0];
     wordCounter += 1;
   }
+
   function clearScreen() {
     words = [];
   }
+
   function start() {
     if (mainIntervalId) return;
+
     mainIntervalId = setInterval(addWord, wordsDelay * 1000);
   }
+
   function finish() {
     if (!mainIntervalId) return;
+
     clearInterval(mainIntervalId);
     mainIntervalId = null;
+    roundCounter = 0;
   }
-  onMount(() => {
-    start();
-  });
+
   onDestroy(() => {
-    clearInterval(mainIntervalId);
+    finish();
   });
+
   function handleKeydown(event) {
     switch (event.code) {
       case "KeyF":
@@ -73,7 +83,21 @@
 
 <svelte:body on:keydown={handleKeydown} />
 <main>
+  <label for="rounds">
+    Number of rounds
+    <input id="rounds" type="number" bind:value={rounds} min="1" />
+  </label>
+
+  <label for="timeForRound">
+    Time for one round in minutes
+    <input id="timeForRound" type="number" bind:value={timeForRoundInMin} />
+  </label>
   <div>Rounds: {roundCounter}</div>
+  <!-- <div>Mantras: {mantraCounter}</div> -->
+
+  <button type="button" on:click={start}>Start</button>
+  <button type="button" on:click={finish}>Finish</button>
+  <br>
   {#each words as delay, i}
     {#if isKrishnaOrder(i)}
       <HolyName name="Krishna" />
