@@ -3,8 +3,12 @@ import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+import replaceHtmlVars from 'rollup-plugin-replace-html-vars';
 
 const production = !process.env.ROLLUP_WATCH;
+
+const MAIN_BUNDLE_PATH = production ? 'build/trataka.js' : 'public/bundle.js';
+const CSS_BUNDLE_PATH = production ? 'build/bundle.css' : 'public/bundle.css';
 
 export default {
 	input: 'src/main.js',
@@ -12,7 +16,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'build/bundle.js'
+		file: MAIN_BUNDLE_PATH
 	},
 	plugins: [
 		svelte({
@@ -21,10 +25,14 @@ export default {
 			// we'll extract any component CSS out into
 			// a separate file — better for performance
 			css: css => {
-				css.write('build/bundle.css');
+				css.write(CSS_BUNDLE_PATH);
 			}
 		}),
-
+		replaceHtmlVars({
+			files: 'index.html',
+			from: ['MAIN_BUNDLE_PATH', 'CSS_BUNDLE_PATH'],
+			to: [MAIN_BUNDLE_PATH, CSS_BUNDLE_PATH],
+		}),
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
 		// some cases you'll need additional configuration —
