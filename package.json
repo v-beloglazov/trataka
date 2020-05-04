@@ -7,9 +7,9 @@
   "author": "Slava Beloglazov <v.beloglazov@xsolla.com>",
   "license": "MIT",
   "dependencies": {
-    "sirv-cli": "^0.4.5"
+    "serve": "^11.3.0"
   },
   "scripts": {
-    "start": "sirv start"
+    "start": "serve ."
   }
 }
