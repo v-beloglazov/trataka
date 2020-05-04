@@ -9,7 +9,9 @@ body {
 	margin: 0;
 	padding: 8px;
 	box-sizing: border-box;
-	font-family: sans-serif;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	line-height: 1.6;
 }
 
 a {
@@ -59,4 +61,17 @@ button:active {
 
 button:focus {
 	border-color: #666;
+}
+
+.main {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.mantra-card {
+	font-size: 1.2em;
+	font-family: Georgia, 'Times New Roman', Times, serif;
+	text-transform: uppercase;
+	text-align: center;
 }
