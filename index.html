@@ -10,24 +10,36 @@
     <link rel="stylesheet" href="index.css" />
 
     <script defer src="index.js"></script>
+    <script defer src="dynamic.js"></script>
   </head>
 
   <body>
+    <h1>Hare Krishna Trataka</h1>
+    <button
+      type="button"
+      data-tab-name="static"
+      data-tab-active="true"
+      onclick="handleTabClick()"
+    >
+      Static
+    </button>
+    <button type="button" data-tab-name="dynamic" onclick="handleTabClick()">
+      Dynamic
+    </button>
     <main class="main">
-      <section class="mantra-card">
-        <div>
-          Hare Krishna Hare Krishna
-        </div>
-        <div>
-          Krishna Krishna Hare Hare
-        </div>
-        <div>
-          Hare Rama Hare Rama
-        </div>
-        <div>
-          Rama Rama Hare Hare
-        </div>
+      <section class="mantra-card" data-tab-content="static">
+        <div>Hare Krishna Hare Krishna</div>
+        <div>Krishna Krishna Hare Hare</div>
+        <div>Hare Rama Hare Rama</div>
+        <div>Rama Rama Hare Hare</div>
       </section>
+      <div class="container" data-tab-content="dynamic">
+        <div class="mantra-row" id="mantra-row"></div>
+        <div>
+          <button type="button" onclick="start()">Start</button>
+          <button type="button" onclick="stop()">Stop</button>
+        </div>
+      </div>
     </main>
   </body>
 </html>
