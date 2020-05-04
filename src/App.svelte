@@ -97,17 +97,20 @@
 
   <button type="button" on:click={start}>Start</button>
   <button type="button" on:click={finish}>Finish</button>
-  <br>
-  {#each words as delay, i}
-    {#if isKrishnaOrder(i)}
-      <HolyName name="Krishna" />
-    {:else if isRamaOrder(i)}
-      <HolyName name="Rama" />
-    {:else}
-      <HolyName name="Hare" />
-    {/if}
-    {#if isStrEnd(i)}
-      <br />
-    {/if}
-  {/each}
+  <section class="mantra-box">
+    <div>
+      {#each words as delay, i}
+        {#if isKrishnaOrder(i)}
+          <HolyName name="Krishna" />
+        {:else if isRamaOrder(i)}
+          <HolyName name="Rama" />
+        {:else}
+          <HolyName name="Hare" />
+        {/if}
+        {#if isStrEnd(i)}
+          <br />
+        {/if}
+      {/each}
+    </div>
+  </section>
 </main>
