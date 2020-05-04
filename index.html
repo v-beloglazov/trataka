@@ -1,18 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-<head>
-	<meta charset='utf8'>
-	<meta name='viewport' content='width=device-width'>
+  <head>
+    <meta charset="utf8" />
+    <meta name="viewport" content="width=device-width" />
 
-	<title>Trataka</title>
+    <title>Hare Krishna Trataka</title>
 
-	<link rel='icon' type='image/png' href='favicon.png'>
-	<link rel='stylesheet' href='global.css'>
-	<link rel='stylesheet' href=public/bundle.css>
+    <link rel="icon" type="image/png" href="favicon.png" />
+    <link rel="stylesheet" href="index.css" />
 
-	<script defer src=public/bundle.js></script>
-</head>
+    <script defer src="index.js"></script>
+  </head>
 
-<body>
-</body>
+  <body>
+    <main>
+      <section class="mantra-box">
+        <div>
+					<!-- prettier-ignore -->
+					Hare Krishna
+					Hare Krishna
+					Krishna Krishna
+					Hare Hare
+					Hare Rama
+					Hare Rama 
+					Rama Rama
+					Hare Hare
+        </div>
+      </section>
+      <label for="rounds">
+        Number of rounds
+        <input id="rounds" type="number" min="1" />
+      </label>
+
+      <label for="timeForRound">
+        Time for one round in minutes
+        <input id="timeForRound" type="number" />
+      </label>
+      <div>Rounds: </div>
+
+			<button type="button">Start</button>
+      <button type="button">Stop</button>
+    </main>
+  </body>
 </html>
