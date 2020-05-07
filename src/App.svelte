@@ -140,8 +140,8 @@
   }
 
   .mantra-card {
-    width: 250px;
-    height: 208px;
+    min-width: 250px;
+    min-height: 210px;
     color: indianred;
     font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 1.4em;
@@ -150,7 +150,7 @@
 
   @media (min-width: 425px) {
     .mantra-card {
-      height: 256px;
+      min-height: 260px;
       font-size: 1.7em;
     }
   }
