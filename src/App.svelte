@@ -1,116 +1,256 @@
 <script>
-  import { afterUpdate, tick, beforeUpdate, onDestroy, onMount } from "svelte";
+  import { onDestroy } from "svelte";
 
-  import {
-    isKrishnaOrder,
-    isMantraEnd,
-    isRamaOrder,
-    isStrEnd
-  } from "./predicates";
-  import {
-    SECONDS_IN_MINUTE,
-    MANTRAS_IN_ROUND,
-    WORDS_IN_MANTRA
-  } from "./constants";
-  import HolyName from "./HolyName.svelte";
+  const HARE = "Харе";
+  const KRISHNA = "Кришна";
+  const RAMA = "Рама";
 
-  let rounds = 16;
-  let timeForRoundInMin = 6;
+  const mahaMantra = [
+    HARE,
+    KRISHNA,
+    HARE,
+    KRISHNA,
+    KRISHNA,
+    KRISHNA,
+    HARE,
+    HARE,
+    HARE,
+    RAMA,
+    HARE,
+    RAMA,
+    RAMA,
+    RAMA,
+    HARE,
+    HARE
+  ];
 
-  $: timeForRoundInSec = timeForRoundInMin * SECONDS_IN_MINUTE;
-  $: timeForMantra = timeForRoundInSec / MANTRAS_IN_ROUND;
-  $: wordsDelay = timeForMantra / WORDS_IN_MANTRA;
+  const MANTRAS_IN_ROUND = 108;
+  const WORDS_IN_MANTRA = 16;
+  const SECONDS_IN_MINUTE = 60;
 
-  let words = [];
+  let dynamicTratakaState = "inactive";
 
-  let mainIntervalId;
-  let roundCounter = 0;
-  let mantraCounter = 0;
+  $: started = dynamicTratakaState === "started";
+  $: inactive = dynamicTratakaState === "inactive";
+
+  $: mantraWords = inactive ? mahaMantra : [];
+
   let wordCounter = 0;
 
-  $: if (mantraCounter && mantraCounter % 108 === 0) {
-    mantraCounter = 0;
-    roundCounter += 1;
-  }
-
-  $: if (roundCounter === rounds) finish();
-
   function addWord() {
-    if (wordCounter && wordCounter % 16 === 0) {
-      clearScreen();
+    const mantraEnd = wordCounter && wordCounter % WORDS_IN_MANTRA === 0;
+    if (mantraEnd) {
+      mantraWords = [];
       wordCounter = 0;
       mantraCounter += 1;
     }
-    words = [...words, 0];
+    mantraWords = [...mantraWords, mahaMantra[wordCounter]];
     wordCounter += 1;
   }
 
-  function clearScreen() {
-    words = [];
-  }
+  let mainIntervalId;
+
+  let rounds = 1;
+  let minutesForRound = 6;
 
   function start() {
-    if (mainIntervalId) return;
+    dynamicTratakaState = "started";
 
-    mainIntervalId = setInterval(addWord, wordsDelay * 1000);
+    const secondsForRound = minutesForRound * SECONDS_IN_MINUTE;
+    const secondsForMantra = secondsForRound / MANTRAS_IN_ROUND;
+    const secondsForWord = secondsForMantra / WORDS_IN_MANTRA;
+    const msForWord = secondsForWord * 1000;
+
+    mainIntervalId = setInterval(addWord, msForWord);
   }
 
-  function finish() {
-    if (!mainIntervalId) return;
-
+  function pause() {
+    dynamicTratakaState = "paused";
     clearInterval(mainIntervalId);
     mainIntervalId = null;
+  }
+
+  function reset() {
+    pause();
+    dynamicTratakaState = "inactive";
+    mantraWords = [];
+    wordCounter = 0;
     roundCounter = 0;
   }
 
   onDestroy(() => {
-    finish();
+    reset();
   });
 
-  function handleKeydown(event) {
-    switch (event.code) {
-      case "KeyF":
-        finish();
-        break;
-      case "KeyS":
-        start();
-        break;
-      default:
-        return;
-    }
+  let mantraCounter = 0;
+  let roundCounter = 0;
+
+  $: if (mantraCounter && mantraCounter % MANTRAS_IN_ROUND === 0) {
+    mantraCounter = 0;
+    roundCounter += 1;
   }
+  $: if (roundCounter === rounds) pause();
+
+  const rowLength = 2;
+  function isRowEnd(wordInd) {
+    const wordNum = wordInd + 1;
+    return wordNum % rowLength === 0;
+  }
+
+  let startButtonName = "Старт";
+  let resetButtonName = "Сброс";
+  let pauseButtonName = "Пауза";
+  let roundsInputLabel = "Количество кругов";
+  let timeForRoundInputLabel = "Время на один круг";
+  let minutes = "минут";
+  let roundsLabel = "Круги";
+  let mantrasLabel = "Мантры";
 </script>
 
-<svelte:body on:keydown={handleKeydown} />
-<main>
-  <label for="rounds">
-    Number of rounds
-    <input id="rounds" type="number" bind:value={rounds} min="1" />
-  </label>
+<style>
+  .main {
+    height: 100%;
+    max-width: 400px;
+    margin: auto;
+  }
 
-  <label for="timeForRound">
-    Time for one round in minutes
-    <input id="timeForRound" type="number" bind:value={timeForRoundInMin} />
-  </label>
-  <div>Rounds: {roundCounter}</div>
-  <!-- <div>Mantras: {mantraCounter}</div> -->
+  .counters {
+    display: flex;
+    justify-content: flex-end;
+  }
 
-  <button type="button" on:click={start}>Start</button>
-  <button type="button" on:click={finish}>Finish</button>
+  .counter {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    margin-right: 10px;
+  }
+
+  .counter:last-child {
+    margin-right: 0;
+  }
+
+  .mantra-box {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+    margin-bottom: 30px;
+  }
+
+  .mantra-card {
+    width: 180px;
+    height: 208px;
+    color: indianred;
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 1.4em;
+    text-align: center;
+  }
+
+  @media (min-width: 425px) {
+    .mantra-card {
+      width: 220px;
+      height: 256px;
+      font-size: 1.7em;
+    }
+  }
+
+  .actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2em;
+  }
+
+  .action-button {
+    cursor: pointer;
+    padding: 10px 15px;
+    margin-right: 1em;
+    border-radius: 6px;
+    background-color: aliceblue;
+  }
+
+  .action-button:hover {
+    border-color: #333;
+  }
+
+  .action-button:last-child {
+    margin-right: 0;
+  }
+
+  .numeric-input {
+    width: 50px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+    background-color: inherit;
+  }
+
+  .numeric-input:focus {
+    border-color: #333;
+  }
+</style>
+
+<main class="main">
+  <div class="counters">
+    <div class="counter">{roundsLabel}: {roundCounter}</div>
+    <div class="counter">{mantrasLabel}: {mantraCounter}</div>
+  </div>
+
   <section class="mantra-box">
-    <div>
-      {#each words as delay, i}
-        {#if isKrishnaOrder(i)}
-          <HolyName name="Krishna" />
-        {:else if isRamaOrder(i)}
-          <HolyName name="Rama" />
-        {:else}
-          <HolyName name="Hare" />
-        {/if}
-        {#if isStrEnd(i)}
+    <div class="mantra-card">
+      {#each mantraWords as word, i}
+        {word}
+        {#if isRowEnd(i)}
           <br />
         {/if}
       {/each}
     </div>
   </section>
+
+  <div class="actions">
+    {#if started}
+      <button class="action-button" type="button" on:click={reset}>
+        {resetButtonName}
+      </button>
+      <button class="action-button" type="button" on:click={pause}>
+        {pauseButtonName}
+      </button>
+    {:else}
+      <button class="action-button" type="button" on:click={start}>
+        {startButtonName}
+      </button>
+    {/if}
+  </div>
+
+  {#if !started}
+    <div class="settings">
+      <form>
+        <label for="rounds">
+          {roundsInputLabel}:
+          <input
+            class="numeric-input"
+            id="rounds"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            bind:value={rounds}
+            min="1" />
+        </label>
+        <label for="timeForRound">
+          {timeForRoundInputLabel}:
+          <input
+            class="numeric-input"
+            id="timeForRound"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            bind:value={minutesForRound} />
+          {minutes}
+        </label>
+      </form>
+    </div>
+  {/if}
 </main>
