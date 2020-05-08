@@ -111,8 +111,11 @@
 <style>
   .main {
     height: 100%;
+    max-height: 550px;
     max-width: 400px;
     margin: auto;
+    display: flex;
+    flex-direction: column;
   }
 
   .counters {
@@ -131,38 +134,27 @@
   }
 
   .mantra-box {
-    position: relative;
+    flex: 1;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 60px;
-    margin-bottom: 30px;
+    height: 100%;
+    margin: 40px 0;
   }
 
   .mantra-card {
-    /* min-width: 250px; */
-    /* min-height: 210px; */
     height: 100%;
     width: 100%;
     color: indianred;
-    font-family: Georgia, "Times New Roman", Times, serif;
-    font-size: 1.4em;
+    font-family: "Arial Black", sans-serif;
+    font-size: 1.6em;
+    text-transform: uppercase;
     text-align: center;
-  }
-
-  @media (min-width: 425px) {
-    .mantra-card {
-      /* min-height: 260px; */
-      font-size: 1.7em;
-    }
   }
 
   .actions {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 2em;
+    margin-bottom: 20px;
   }
 
   .action-button {
@@ -201,33 +193,30 @@
     <div class="counter">{mantrasLabel}: {mantraCounter}</div>
   </div>
 
-  <div>
-
-    <section class="mantra-box">
-      <div class="mantra-card">
-        {#each mantraWords as word, i}
-          {word}
-          {#if isRowEnd(i)}
-            <br />
-          {/if}
-        {/each}
-      </div>
-    </section>
-
-    <div class="actions">
-      {#if started}
-        <button class="action-button" type="button" on:click={reset}>
-          {resetButtonName}
-        </button>
-        <button class="action-button" type="button" on:click={pause}>
-          {pauseButtonName}
-        </button>
-      {:else}
-        <button class="action-button" type="button" on:click={start}>
-          {startButtonName}
-        </button>
-      {/if}
+  <section class="mantra-box">
+    <div class="mantra-card">
+      {#each mantraWords as word, i}
+        {word}
+        {#if isRowEnd(i)}
+          <br />
+        {/if}
+      {/each}
     </div>
+  </section>
+
+  <div class="actions">
+    {#if started}
+      <button class="action-button" type="button" on:click={reset}>
+        {resetButtonName}
+      </button>
+      <button class="action-button" type="button" on:click={pause}>
+        {pauseButtonName}
+      </button>
+    {:else}
+      <button class="action-button" type="button" on:click={start}>
+        {startButtonName}
+      </button>
+    {/if}
   </div>
 
   {#if !started}
