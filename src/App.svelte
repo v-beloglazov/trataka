@@ -75,6 +75,7 @@
     dynamicTratakaState = "inactive";
     mantraWords = [];
     wordCounter = 0;
+    mantraCounter = 0;
     roundCounter = 0;
   }
 
@@ -120,7 +121,7 @@
   }
 
   .counter {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: "Courier New", Courier, monospace;
     font-size: 14px;
     margin-right: 10px;
   }
@@ -140,8 +141,10 @@
   }
 
   .mantra-card {
-    min-width: 250px;
-    min-height: 210px;
+    /* min-width: 250px; */
+    /* min-height: 210px; */
+    height: 100%;
+    width: 100%;
     color: indianred;
     font-family: Georgia, "Times New Roman", Times, serif;
     font-size: 1.4em;
@@ -150,7 +153,7 @@
 
   @media (min-width: 425px) {
     .mantra-card {
-      min-height: 260px;
+      /* min-height: 260px; */
       font-size: 1.7em;
     }
   }
@@ -198,30 +201,33 @@
     <div class="counter">{mantrasLabel}: {mantraCounter}</div>
   </div>
 
-  <section class="mantra-box">
-    <div class="mantra-card">
-      {#each mantraWords as word, i}
-        {word}
-        {#if isRowEnd(i)}
-          <br />
-        {/if}
-      {/each}
-    </div>
-  </section>
+  <div>
 
-  <div class="actions">
-    {#if started}
-      <button class="action-button" type="button" on:click={reset}>
-        {resetButtonName}
-      </button>
-      <button class="action-button" type="button" on:click={pause}>
-        {pauseButtonName}
-      </button>
-    {:else}
-      <button class="action-button" type="button" on:click={start}>
-        {startButtonName}
-      </button>
-    {/if}
+    <section class="mantra-box">
+      <div class="mantra-card">
+        {#each mantraWords as word, i}
+          {word}
+          {#if isRowEnd(i)}
+            <br />
+          {/if}
+        {/each}
+      </div>
+    </section>
+
+    <div class="actions">
+      {#if started}
+        <button class="action-button" type="button" on:click={reset}>
+          {resetButtonName}
+        </button>
+        <button class="action-button" type="button" on:click={pause}>
+          {pauseButtonName}
+        </button>
+      {:else}
+        <button class="action-button" type="button" on:click={start}>
+          {startButtonName}
+        </button>
+      {/if}
+    </div>
   </div>
 
   {#if !started}
