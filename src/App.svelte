@@ -44,7 +44,7 @@
   $: finished = tratakaState === states.finished;
 
   let wordCounter = 0;
-  let mantraCounter = 107;
+  let mantraCounter = 0;
   let roundCounter = 0;
 
   function handleCounters() {
