@@ -242,7 +242,7 @@
         {pauseButtonName}
       </button>
     {/if}
-    {#if inactive}
+    {#if inactive || paused}
       <button class="action-button" type="button" on:click={start}>
         {startButtonName}
       </button>
