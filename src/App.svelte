@@ -28,24 +28,51 @@
   const WORDS_IN_MANTRA = 16;
   const SECONDS_IN_MINUTE = 60;
 
-  let dynamicTratakaState = "inactive";
+  const states = {
+    inactive: "inactive",
+    started: "started",
+    paused: "paused",
+    finished: "finished"
+  };
 
-  $: started = dynamicTratakaState === "started";
-  $: inactive = dynamicTratakaState === "inactive";
+  let tratakaState = states.inactive;
+  $: console.log(tratakaState)
+
+  $: started = tratakaState === states.started;
+  $: paused = tratakaState === states.paused;
+  $: inactive = tratakaState === states.inactive;
+  $: finished = tratakaState === states.finished;
+
+  let wordCounter = 0;
+  let mantraCounter = 107;
+  let roundCounter = 0;
+
+  function handleCounters() {
+    if (wordCounter - WORDS_IN_MANTRA === 1) {
+      mantraWords = [];
+      wordCounter = 0;
+      mantraCounter = mantraCounter + 1;
+    }
+
+    if (mantraCounter === MANTRAS_IN_ROUND) {
+      mantraCounter = 0;
+      roundCounter = roundCounter + 1;
+    }
+  }
+
+  $: {
+    handleCounters(wordCounter, mantraCounter, roundCounter)
+    if (roundCounter === rounds) {
+      finish()
+      tratakaState = states.finished
+      }
+  };
 
   $: mantraWords = inactive ? mahaMantra : [];
 
-  let wordCounter = 0;
-
   function addWord() {
-    const mantraEnd = wordCounter && wordCounter % WORDS_IN_MANTRA === 0;
-    if (mantraEnd) {
-      mantraWords = [];
-      wordCounter = 0;
-      mantraCounter += 1;
-    }
     mantraWords = [...mantraWords, mahaMantra[wordCounter]];
-    wordCounter += 1;
+    wordCounter = wordCounter + 1;
   }
 
   let mainIntervalId;
@@ -54,7 +81,7 @@
   let minutesForRound = 6;
 
   function start() {
-    dynamicTratakaState = "started";
+    tratakaState = states.started;
 
     const secondsForRound = minutesForRound * SECONDS_IN_MINUTE;
     const secondsForMantra = secondsForRound / MANTRAS_IN_ROUND;
@@ -64,16 +91,22 @@
     mainIntervalId = setInterval(addWord, msForWord);
   }
 
+  function finish() {
+    tratakaState = states.finished;
+    clearInterval(mainIntervalId);
+    mainIntervalId = null;
+  }
+
   function pause() {
-    dynamicTratakaState = "paused";
+    tratakaState = states.paused;
     clearInterval(mainIntervalId);
     mainIntervalId = null;
   }
 
   function reset() {
-    pause();
-    dynamicTratakaState = "inactive";
-    mantraWords = [];
+    tratakaState = states.inactive;
+    clearInterval(mainIntervalId);
+    mainIntervalId = null;
     wordCounter = 0;
     mantraCounter = 0;
     roundCounter = 0;
@@ -83,16 +116,7 @@
     reset();
   });
 
-  let mantraCounter = 0;
-  let roundCounter = 0;
-
-  $: if (mantraCounter && mantraCounter % MANTRAS_IN_ROUND === 0) {
-    mantraCounter = 0;
-    roundCounter += 1;
-  }
-  $: if (roundCounter === rounds) pause();
-
-  const rowLength = 2;
+  let rowLength = 2;
   function isRowEnd(wordInd) {
     const wordNum = wordInd + 1;
     return wordNum % rowLength === 0;
@@ -106,6 +130,7 @@
   let minutes = "минут";
   let roundsLabel = "Круги";
   let mantrasLabel = "Мантры";
+  let wordsLabel = "Слова";
 </script>
 
 <style>
@@ -141,13 +166,10 @@
   }
 
   .mantra-card {
-    height: 100%;
-    width: 100%;
     color: indianred;
-    font-family: "Arial Black", sans-serif;
-    font-size: 1.6em;
+    font-size: 2em;
+    font-weight: bold;
     text-transform: uppercase;
-    text-align: center;
   }
 
   .actions {
@@ -191,60 +213,68 @@
   <div class="counters">
     <div class="counter">{roundsLabel}: {roundCounter}</div>
     <div class="counter">{mantrasLabel}: {mantraCounter}</div>
+    <!-- <div class="counter">{wordsLabel}: {wordCounter}</div> -->
   </div>
 
   <section class="mantra-box">
-    <div class="mantra-card">
-      {#each mantraWords as word, i}
-        {word}
-        {#if isRowEnd(i)}
-          <br />
-        {/if}
-      {/each}
-    </div>
+    {#if finished}
+      <div class="congratulations">Ура! Все круги прочитаны! Молодец!</div>
+    {:else}
+      <div class="mantra-card">
+        {#each mantraWords as word, i}
+          {word}
+          {#if isRowEnd(i)}
+            <br />
+          {/if}
+        {/each}
+      </div>
+    {/if}
   </section>
 
   <div class="actions">
-    {#if started}
+    {#if paused || finished}
       <button class="action-button" type="button" on:click={reset}>
         {resetButtonName}
       </button>
+    {/if}
+    {#if started}
       <button class="action-button" type="button" on:click={pause}>
         {pauseButtonName}
       </button>
-    {:else}
+    {/if}
+    {#if inactive}
       <button class="action-button" type="button" on:click={start}>
         {startButtonName}
       </button>
     {/if}
   </div>
 
-  {#if !started}
-    <div class="settings">
-      <form>
-        <label for="rounds">
-          {roundsInputLabel}:
-          <input
-            class="numeric-input"
-            id="rounds"
-            type="text"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            bind:value={rounds}
-            min="1" />
-        </label>
-        <label for="timeForRound">
-          {timeForRoundInputLabel}:
-          <input
-            class="numeric-input"
-            id="timeForRound"
-            type="text"
-            inputmode="numeric"
-            pattern="[0-9]*"
-            bind:value={minutesForRound} />
-          {minutes}
-        </label>
-      </form>
-    </div>
+  {#if paused || inactive}
+  <div class="settings">
+    <form>
+      <label for="rounds">
+        {roundsInputLabel}:
+        <input
+          class="numeric-input"
+          id="rounds"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          bind:value={rounds}
+          min="1" />
+      </label>
+      <label for="timeForRound">
+        {timeForRoundInputLabel}:
+        <input
+          class="numeric-input"
+          id="timeForRound"
+          type="text"
+          inputmode="numeric"
+          pattern="[0-9]*"
+          bind:value={minutesForRound} />
+        {minutes}
+      </label>
+    </form>
+  </div>
   {/if}
 </main>
