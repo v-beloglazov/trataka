@@ -1,9 +1,9 @@
 <script>
-  import { onDestroy } from "svelte";
+  import { onDestroy } from 'svelte';
 
-  const HARE = "Харе";
-  const KRISHNA = "Кришна";
-  const RAMA = "Рама";
+  const HARE = 'Харе';
+  const KRISHNA = 'Кришна';
+  const RAMA = 'Рама';
 
   const mahaMantra = [
     HARE,
@@ -21,7 +21,7 @@
     RAMA,
     RAMA,
     HARE,
-    HARE
+    HARE,
   ];
 
   const MANTRAS_IN_ROUND = 108;
@@ -29,50 +29,27 @@
   const SECONDS_IN_MINUTE = 60;
 
   const states = {
-    inactive: "inactive",
-    started: "started",
-    paused: "paused",
-    finished: "finished"
+    inactive: 'inactive',
+    started: 'started',
+    paused: 'paused',
+    finished: 'finished',
   };
 
   let tratakaState = states.inactive;
-  $: console.log(tratakaState)
+  // $: console.log(tratakaState);
 
   $: started = tratakaState === states.started;
   $: paused = tratakaState === states.paused;
   $: inactive = tratakaState === states.inactive;
   $: finished = tratakaState === states.finished;
 
-  let wordCounter = 0;
-  let mantraCounter = 0;
-  let roundCounter = 0;
-
-  function handleCounters() {
-    if (wordCounter - WORDS_IN_MANTRA === 1) {
-      mantraWords = [];
-      wordCounter = 0;
-      mantraCounter = mantraCounter + 1;
-    }
-
-    if (mantraCounter === MANTRAS_IN_ROUND) {
-      mantraCounter = 0;
-      roundCounter = roundCounter + 1;
-    }
-  }
-
-  $: {
-    handleCounters(wordCounter, mantraCounter, roundCounter)
-    if (roundCounter === rounds) {
-      finish()
-      tratakaState = states.finished
-      }
-  };
-
   $: mantraWords = inactive ? mahaMantra : [];
+
+  let wordCounter = 0;
 
   function addWord() {
     mantraWords = [...mantraWords, mahaMantra[wordCounter]];
-    wordCounter = wordCounter + 1;
+    wordCounter += 1;
   }
 
   let mainIntervalId;
@@ -97,6 +74,30 @@
     mainIntervalId = null;
   }
 
+  let mantraCounter = 0;
+  let roundCounter = 0;
+
+  function handleCounters() {
+    if (wordCounter - WORDS_IN_MANTRA === 1) {
+      mantraWords = [];
+      wordCounter = 0;
+      mantraCounter += 1;
+    }
+
+    if (mantraCounter === MANTRAS_IN_ROUND) {
+      mantraCounter = 0;
+      roundCounter += 1;
+    }
+  }
+
+  $: {
+    handleCounters(wordCounter, mantraCounter, roundCounter);
+    if (roundCounter === rounds) {
+      finish();
+      tratakaState = states.finished;
+    }
+  }
+
   function pause() {
     tratakaState = states.paused;
     clearInterval(mainIntervalId);
@@ -116,21 +117,21 @@
     reset();
   });
 
-  let rowLength = 2;
+  const rowLength = 2;
   function isRowEnd(wordInd) {
     const wordNum = wordInd + 1;
     return wordNum % rowLength === 0;
   }
 
-  let startButtonName = "Старт";
-  let resetButtonName = "Сброс";
-  let pauseButtonName = "Пауза";
-  let roundsInputLabel = "Количество кругов";
-  let timeForRoundInputLabel = "Время на один круг";
-  let minutes = "минут";
-  let roundsLabel = "Круги";
-  let mantrasLabel = "Мантры";
-  let wordsLabel = "Слова";
+  const startButtonName = 'Старт';
+  const resetButtonName = 'Сброс';
+  const pauseButtonName = 'Пауза';
+  const roundsInputLabel = 'Количество кругов';
+  const timeForRoundInputLabel = 'Время на один круг';
+  const minutes = 'минут';
+  const roundsLabel = 'Круги';
+  const mantrasLabel = 'Мантры';
+  // let wordsLabel = "Слова";
 </script>
 
 <style>
@@ -250,31 +251,31 @@
   </div>
 
   {#if paused || inactive}
-  <div class="settings">
-    <form>
-      <label for="rounds">
-        {roundsInputLabel}:
-        <input
-          class="numeric-input"
-          id="rounds"
-          type="text"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          bind:value={rounds}
-          min="1" />
-      </label>
-      <label for="timeForRound">
-        {timeForRoundInputLabel}:
-        <input
-          class="numeric-input"
-          id="timeForRound"
-          type="text"
-          inputmode="numeric"
-          pattern="[0-9]*"
-          bind:value={minutesForRound} />
-        {minutes}
-      </label>
-    </form>
-  </div>
+    <div class="settings">
+      <form>
+        <label for="rounds">
+          {roundsInputLabel}:
+          <input
+            class="numeric-input"
+            id="rounds"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            bind:value={rounds}
+            min="1" />
+        </label>
+        <label for="timeForRound">
+          {timeForRoundInputLabel}:
+          <input
+            class="numeric-input"
+            id="timeForRound"
+            type="text"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            bind:value={minutesForRound} />
+          {minutes}
+        </label>
+      </form>
+    </div>
   {/if}
 </main>
