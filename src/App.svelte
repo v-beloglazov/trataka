@@ -159,6 +159,10 @@
     margin-right: 0;
   }
 
+  .counter-number {
+    font-weight: bold;
+  }
+
   .mantra-box {
     flex: 1;
     width: 100%;
@@ -167,10 +171,22 @@
   }
 
   .mantra-card {
-    color: indianred;
+    color: hsla(0, 53%, 53%, 1);
     font-size: 2em;
     font-weight: bold;
     text-transform: uppercase;
+  }
+
+  @media (min-width: 360px) {
+    .mantra-card {
+      padding-left: 38px;
+    }
+  }
+
+  @media (min-width: 425px) {
+    .mantra-card {
+      padding-left: 58px;
+    }
   }
 
   .actions {
@@ -185,7 +201,6 @@
     padding: 10px 15px;
     margin-right: 1em;
     border-radius: 6px;
-    background-color: aliceblue;
   }
 
   .action-button:hover {
@@ -200,21 +215,21 @@
     width: 50px;
     border: none;
     border-radius: 0;
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #333;
     text-align: center;
     background-color: inherit;
   }
 
   .numeric-input:focus {
-    border-color: #333;
+    border-color: #171717;
   }
 </style>
 
 <main class="main">
   <div class="counters">
-    <div class="counter">{roundsLabel}: {roundCounter}</div>
-    <div class="counter">{mantrasLabel}: {mantraCounter}</div>
-    <!-- <div class="counter">{wordsLabel}: {wordCounter}</div> -->
+    <div class="counter">{roundsLabel}: <span class="counter-number">{roundCounter}</span></div>
+    <div class="counter">{mantrasLabel}: <span class="counter-number">{mantraCounter}</span></div>
+    <!-- <div class="counter">{wordsLabel}: <span class="counter-number">{wordCounter}</span></div> -->
   </div>
 
   <section class="mantra-box">
