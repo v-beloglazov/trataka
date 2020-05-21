@@ -74,7 +74,7 @@
     mainIntervalId = null;
   }
 
-  let mantraCounter = 0;
+  let mantraCounter = 100;
   let roundCounter = 0;
 
   function handleCounters() {
@@ -92,7 +92,7 @@
 
   $: {
     handleCounters(wordCounter, mantraCounter, roundCounter);
-    if (roundCounter === rounds) {
+    if (roundCounter && roundCounter === rounds) {
       finish();
       tratakaState = states.finished;
     }
@@ -227,8 +227,14 @@
 
 <main class="main">
   <div class="counters">
-    <div class="counter">{roundsLabel}: <span class="counter-number">{roundCounter}</span></div>
-    <div class="counter">{mantrasLabel}: <span class="counter-number">{mantraCounter}</span></div>
+    <div class="counter">
+      {roundsLabel}:
+      <span class="counter-number">{roundCounter}</span>
+    </div>
+    <div class="counter">
+      {mantrasLabel}:
+      <span class="counter-number">{mantraCounter}</span>
+    </div>
     <!-- <div class="counter">{wordsLabel}: <span class="counter-number">{wordCounter}</span></div> -->
   </div>
 
@@ -273,7 +279,7 @@
           <input
             class="numeric-input"
             id="rounds"
-            type="text"
+            type="number"
             inputmode="numeric"
             pattern="[0-9]*"
             bind:value={rounds}
@@ -284,10 +290,11 @@
           <input
             class="numeric-input"
             id="timeForRound"
-            type="text"
+            type="number"
             inputmode="numeric"
             pattern="[0-9]*"
-            bind:value={minutesForRound} />
+            bind:value={minutesForRound}
+            min="1" />
           {minutes}
         </label>
       </form>
