@@ -47,7 +47,7 @@
     finished: 'finished',
   };
 
-  let tratakaState = states.finished;
+  let tratakaState = states.inactive;
   // $: console.log(tratakaState);
 
   $: started = tratakaState === states.started;
