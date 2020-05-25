@@ -1,6 +1,7 @@
 <script>
   import { onDestroy } from 'svelte';
-  import praiseImg from '../public/images/1.png';
+  import praiseImg1 from './images/praise/1.png';
+  import praiseImg2 from './images/praise/2.png';
 
   const HARE = 'Харе';
   const KRISHNA = 'Кришна';
@@ -123,6 +124,17 @@
     const wordNum = wordInd + 1;
     return wordNum % rowLength === 0;
   }
+
+  function getRandomInt(min, max) {
+    const ceiledMin = Math.ceil(min);
+    const flooredMax = Math.floor(max);
+
+    // The maximum is exclusive and the minimum is inclusive
+    return Math.floor(Math.random() * (flooredMax - ceiledMin)) + ceiledMin; 
+  }
+
+  const praiseImageList = [praiseImg1, praiseImg2];
+  const praiseImg = praiseImageList[getRandomInt(0, praiseImageList.length)];
 
   const startButtonName = 'Старт';
   const resetButtonName = 'Сброс';
@@ -253,7 +265,7 @@
     {#if finished}
       <div class="praise-box">
         <span class="praise-text">Ура! Все круги прочитаны! Молодец!</span>
-        <img class="praise-image" src={praiseImg} alt="Вы молодец!" width="300" height="300" />
+        <img class="praise-image" src={praiseImg || ''} alt="Вы молодец!" width="300" height="300" />
       </div>
     {:else}
       <div class="mantra-card">
