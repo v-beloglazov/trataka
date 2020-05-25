@@ -4,12 +4,12 @@ import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import svg from 'rollup-plugin-svg';
+import image from '@rollup/plugin-image';
 
 const production = !process.env.ROLLUP_WATCH;
 
 const MAIN_BUNDLE_PATH = 'public/build/bundle.js';
 const CSS_BUNDLE_PATH = 'public/build/bundle.css';
-
 
 function serve() {
   let started = false;
@@ -69,6 +69,7 @@ export default {
     // instead of npm run dev), minify
     production && terser(),
     svg({ base64: true }),
+    image(),
   ],
   watch: {
     clearScreen: false,

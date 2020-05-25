@@ -1,5 +1,6 @@
 <script>
   import { onDestroy } from 'svelte';
+  import praiseImg from '../public/images/1.png';
 
   const HARE = 'Харе';
   const KRISHNA = 'Кришна';
@@ -35,7 +36,7 @@
     finished: 'finished',
   };
 
-  let tratakaState = states.inactive;
+  let tratakaState = states.finished;
   // $: console.log(tratakaState);
 
   $: started = tratakaState === states.started;
@@ -189,6 +190,16 @@
     }
   }
 
+  .praise-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .praise-image {
+    margin-top: 1em;
+  }
+
   .actions {
     width: 100%;
     display: flex;
@@ -240,7 +251,10 @@
 
   <section class="mantra-box">
     {#if finished}
-      <div class="congratulations">Ура! Все круги прочитаны! Молодец!</div>
+      <div class="praise-box">
+        <span class="praise-text">Ура! Все круги прочитаны! Молодец!</span>
+        <img class="praise-image" src={praiseImg} alt="Вы молодец!" width="300" height="300" />
+      </div>
     {:else}
       <div class="mantra-card">
         {#each mantraWords as word, i}
