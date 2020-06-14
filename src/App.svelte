@@ -235,11 +235,14 @@
     margin-top: 1em;
   }
 
+  .settings {
+    margin-bottom: 20px;
+  }
+
   .actions {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
   }
 
   .action-button {
@@ -307,24 +310,6 @@
     {/if}
   </section>
 
-  <div class="actions">
-    {#if paused || finished}
-      <button class="action-button" type="button" on:click={reset}>
-        {resetButtonName}
-      </button>
-    {/if}
-    {#if started}
-      <button class="action-button" type="button" on:click={pause}>
-        {pauseButtonName}
-      </button>
-    {/if}
-    {#if inactive || paused}
-      <button class="action-button" type="button" on:click={start}>
-        {startButtonName}
-      </button>
-    {/if}
-  </div>
-
   {#if paused || inactive}
     <div class="settings">
       <form>
@@ -354,4 +339,22 @@
       </form>
     </div>
   {/if}
+
+  <div class="actions">
+    {#if paused || finished}
+      <button class="action-button" type="button" on:click={reset}>
+        {resetButtonName}
+      </button>
+    {/if}
+    {#if started}
+      <button class="action-button" type="button" on:click={pause}>
+        {pauseButtonName}
+      </button>
+    {/if}
+    {#if inactive || paused}
+      <button class="action-button" type="button" on:click={start}>
+        {startButtonName}
+      </button>
+    {/if}
+  </div>
 </main>
