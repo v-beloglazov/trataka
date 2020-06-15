@@ -37,8 +37,12 @@
   ];
 
   const MANTRAS_IN_ROUND = 108;
-  const WORDS_IN_MANTRA = 16;
   const SECONDS_IN_MINUTE = 60;
+  const WORDS_IN_MANTRA = 16;
+  const LETTERS_IN_MANTRA = mahaMantra.reduce(
+    (acc, word) => acc + word.length,
+    0,
+  );
 
   const states = {
     inactive: 'inactive',
@@ -57,11 +61,18 @@
 
   $: mantraWords = inactive ? mahaMantra : [];
 
+  let letterCounter = 0;
   let wordCounter = 0;
 
   function addWord() {
     mantraWords = [...mantraWords, mahaMantra[wordCounter]];
-    wordCounter += 1;
+  }
+
+  function handleLetterTick() {
+    if (letterCounter === 0) {
+      addWord();
+    }
+    letterCounter += 1;
   }
 
   let mainIntervalId;
@@ -74,10 +85,12 @@
 
     const secondsForRound = minutesForRound * SECONDS_IN_MINUTE;
     const secondsForMantra = secondsForRound / MANTRAS_IN_ROUND;
-    const secondsForWord = secondsForMantra / WORDS_IN_MANTRA;
-    const msForWord = secondsForWord * 1000;
+    // const secondsForWord = secondsForMantra / WORDS_IN_MANTRA;
+    const secondForLetter = secondsForMantra / LETTERS_IN_MANTRA;
+    // const msForWord = secondsForWord * 1000;
+    const msForLetter = secondForLetter * 1000;
 
-    mainIntervalId = setInterval(addWord, msForWord);
+    mainIntervalId = setInterval(handleLetterTick, msForLetter);
   }
 
   function finish() {
@@ -86,24 +99,30 @@
     mainIntervalId = null;
   }
 
-  let mantraCounter = 0;
+  let mantraCounter = 107;
   let roundCounter = 0;
 
   function handleCounters() {
-    if (wordCounter - WORDS_IN_MANTRA === 1) {
+    const wordEnd = letterCounter === mahaMantra[wordCounter].length;
+    if (wordEnd) {
+      letterCounter = 0;
+      wordCounter += 1;
+    }
+    const mantraEnd = wordCounter === WORDS_IN_MANTRA;
+    if (mantraEnd) {
       mantraWords = [];
       wordCounter = 0;
       mantraCounter += 1;
     }
-
-    if (mantraCounter === MANTRAS_IN_ROUND) {
+    const roundEnd = mantraCounter === MANTRAS_IN_ROUND;
+    if (roundEnd) {
       mantraCounter = 0;
       roundCounter += 1;
     }
   }
 
   $: {
-    handleCounters(wordCounter, mantraCounter, roundCounter);
+    handleCounters(letterCounter, wordCounter, mantraCounter);
     if (roundCounter && roundCounter === rounds) {
       finish();
       tratakaState = states.finished;
