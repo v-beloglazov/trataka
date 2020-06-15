@@ -99,7 +99,7 @@
     mainIntervalId = null;
   }
 
-  let mantraCounter = 107;
+  let mantraCounter = 0;
   let roundCounter = 0;
 
   function handleCounters() {
