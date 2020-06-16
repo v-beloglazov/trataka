@@ -142,6 +142,7 @@
     wordCounter = 0;
     mantraCounter = 0;
     roundCounter = 0;
+    letterCounter = 0;
   }
 
   onDestroy(() => {
