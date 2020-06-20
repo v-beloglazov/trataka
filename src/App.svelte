@@ -59,13 +59,20 @@
   $: inactive = tratakaState === states.inactive;
   $: finished = tratakaState === states.finished;
 
-  $: mantraWords = inactive ? mahaMantra : [];
+  // $: mantraWords = inactive ? mahaMantra : [];
 
   let letterCounter = 0;
   let wordCounter = 0;
 
+  function toggleWordView(ind) {
+    const wordElement = document.querySelector(`#hn-${ind}`);
+    wordElement.classList.toggle('hidden');
+  }
+
   function addWord() {
-    mantraWords = [...mantraWords, mahaMantra[wordCounter]];
+    // mantraWords = [...mantraWords, mahaMantra[wordCounter]];
+
+    toggleWordView(wordCounter);
   }
 
   function handleLetterTick() {
@@ -75,12 +82,20 @@
     letterCounter += 1;
   }
 
+  function hideMantra() {
+    mahaMantra.forEach((_, ind) => toggleWordView(ind));
+  }
+
   let mainIntervalId;
 
   let rounds = 1;
-  let minutesForRound = 6;
+  let minutesForRound = 10;
 
   function start() {
+    if (tratakaState === states.inactive) {
+      hideMantra();
+    }
+
     tratakaState = states.started;
 
     const secondsForRound = minutesForRound * SECONDS_IN_MINUTE;
@@ -110,7 +125,8 @@
     }
     const mantraEnd = wordCounter === WORDS_IN_MANTRA;
     if (mantraEnd) {
-      mantraWords = [];
+      // mantraWords = [];
+      hideMantra();
       wordCounter = 0;
       mantraCounter += 1;
     }
@@ -182,8 +198,8 @@
   const startButtonName = 'Старт';
   const resetButtonName = 'Сброс';
   const pauseButtonName = 'Пауза';
-  const roundsInputLabel = 'Количество кругов';
-  const timeForRoundInputLabel = 'Время на один круг';
+  const roundsInputLabel = 'Кругов';
+  const timeForRoundInputLabel = 'Время круга';
   const minutes = 'минут';
   const roundsLabel = 'Круги';
   const mantrasLabel = 'Мантры';
@@ -209,17 +225,17 @@
     font-family: 'Courier New', Courier, monospace;
     font-size: 14px;
     margin-right: 10px;
+    color: var(--secondary-text);
   }
 
   .counter:last-child {
     margin-right: 0;
   }
 
-  .counter-number {
-    font-weight: bold;
-  }
-
   .mantra-box {
+    display: flex;
+    justify-content: center;
+    text-align: center;
     flex: 1;
     width: 100%;
     height: 100%;
@@ -227,13 +243,11 @@
   }
 
   .mantra-card {
-    color: hsla(0, 53%, 53%, 1);
     font-size: 2em;
-    font-weight: bold;
-    text-transform: uppercase;
+    font-weight: 500;
   }
 
-  @media (min-width: 360px) {
+  /* @media (min-width: 360px) {
     .mantra-card {
       padding-left: 38px;
     }
@@ -243,6 +257,14 @@
     .mantra-card {
       padding-left: 58px;
     }
+  } */
+
+  .holy-name {
+    transition: opacity 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  :global(.hidden) {
+    opacity: 0;
   }
 
   .praise-box {
@@ -257,6 +279,8 @@
 
   .settings {
     margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
   }
 
   .actions {
@@ -270,6 +294,7 @@
     padding: 10px 15px;
     margin-right: 1em;
     border-radius: 6px;
+    text-transform: uppercase;
   }
 
   .action-button:hover {
@@ -281,31 +306,36 @@
   }
 
   .numeric-input {
-    width: 50px;
+    min-width: 40px;
+    max-width: 50px;
     border: none;
     border-radius: 0;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid var(--prime);
     text-align: center;
     background-color: inherit;
+    font-weight: 500;
+    font-size: 1.1em;
   }
 
   .numeric-input:focus {
-    border-color: #171717;
+    color: var(--flash);
   }
 </style>
 
 <main class="main">
-  <div class="counters">
-    <div class="counter">
-      {roundsLabel}:
-      <span class="counter-number">{roundCounter}</span>
+  {#if !inactive}
+    <div class="counters">
+      <div class="counter">
+        {roundsLabel}:
+        <span class="counter-number">{roundCounter}</span>
+      </div>
+      <div class="counter">
+        {mantrasLabel}:
+        <span class="counter-number">{mantraCounter}</span>
+      </div>
+      <!-- <div class="counter">{wordsLabel}: <span class="counter-number">{wordCounter}</span></div> -->
     </div>
-    <div class="counter">
-      {mantrasLabel}:
-      <span class="counter-number">{mantraCounter}</span>
-    </div>
-    <!-- <div class="counter">{wordsLabel}: <span class="counter-number">{wordCounter}</span></div> -->
-  </div>
+  {/if}
 
   <section class="mantra-box">
     {#if finished}
@@ -320,8 +350,8 @@
       </div>
     {:else}
       <div class="mantra-card">
-        {#each mantraWords as word, i}
-          {word}
+        {#each mahaMantra as word, i (i)}
+          <span id={`hn-${i}`} class="holy-name">{word}</span>
           {#if isRowEnd(i)}
             <br />
           {/if}

@@ -5,16 +5,33 @@ body {
   height: 100%;
 }
 
+body.simple-light {
+  --prime: #333333;
+  --flash: #000000;
+  --second: #ffffff;
+  --bg: var(--second);
+  --text: var(--prime);
+  --secondary-text: #999999;
+}
+
+body.simple-dark {
+  --second: #333333;
+  --flash: #000000;
+  --prime: #ffffff;
+  --bg: var(--second);
+  --text: var(--prime);
+  --secondary-text: #999999;
+}
+
 body {
-  color: #171717;
   margin: 0;
   padding: 8px;
   box-sizing: border-box;
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-size: 16px;
-	background-color: #ffeab1;
-	background-image: url(../images/bg-mandala.png);
-	background-repeat: repeat;
+  color: var(--text);
+	background-color: var(--bg);
+  transition: color 0.2s ease-out, background-color 0.2s ease-out;
 }
 
 a {
@@ -45,6 +62,7 @@ textarea {
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 2px;
+  color: inherit;
 }
 
 input:disabled {
@@ -56,15 +74,18 @@ input[type='range'] {
 }
 
 button {
-  color: #333;
-  background-color: #f4f4f4;
+  color: var(--second);
+  background-color: var(--prime);
   outline: none;
+  border-color: var(--second);
 }
 
 button:active {
-  background-color: #ddd;
+  background-color: var(--second);
+  color: var(--prime)
 }
 
 button:focus {
-  border-color: #666;
+  border-color: var(--flash);
+  background-color: var(--flash);
 }
