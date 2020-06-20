@@ -68,7 +68,7 @@
     const wordElement = document.querySelector(`#hn-${ind}`);
     wordElement.classList.add('hidden');
   }
-  
+
   function showWord(ind) {
     const wordElement = document.querySelector(`#hn-${ind}`);
     wordElement.classList.remove('hidden');
@@ -325,10 +325,6 @@
     background-color: inherit;
     font-weight: 500;
     font-size: 1.1em;
-  }
-
-  .numeric-input:focus {
-    color: var(--flash);
   }
 </style>
 
