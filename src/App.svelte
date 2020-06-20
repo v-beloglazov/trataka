@@ -64,15 +64,20 @@
   let letterCounter = 0;
   let wordCounter = 0;
 
-  function toggleWordView(ind) {
+  function hideWord(ind) {
     const wordElement = document.querySelector(`#hn-${ind}`);
-    wordElement.classList.toggle('hidden');
+    wordElement.classList.add('hidden');
+  }
+  
+  function showWord(ind) {
+    const wordElement = document.querySelector(`#hn-${ind}`);
+    wordElement.classList.remove('hidden');
   }
 
   function addWord() {
     // mantraWords = [...mantraWords, mahaMantra[wordCounter]];
 
-    toggleWordView(wordCounter);
+    showWord(wordCounter);
   }
 
   function handleLetterTick() {
@@ -83,7 +88,11 @@
   }
 
   function hideMantra() {
-    mahaMantra.forEach((_, ind) => toggleWordView(ind));
+    mahaMantra.forEach((_, ind) => hideWord(ind));
+  }
+
+  function showMantra() {
+    mahaMantra.forEach((_, ind) => showWord(ind));
   }
 
   let mainIntervalId;
@@ -152,6 +161,7 @@
   }
 
   function reset() {
+    showMantra();
     tratakaState = states.inactive;
     clearInterval(mainIntervalId);
     mainIntervalId = null;
