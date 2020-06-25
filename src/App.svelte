@@ -39,7 +39,7 @@
 
   let letterCounter = 0;
   let wordCounter = 0;
-  let mantraCounter = 107;
+  let mantraCounter = 0;
   let roundCounter = 0;
 
   let rounds = 1;
