@@ -6,20 +6,14 @@ body {
 }
 
 body.simple-light {
-  --prime: #333333;
-  --flash: #000000;
-  --second: #ffffff;
-  --bg: var(--second);
-  --text: var(--prime);
+  --bg: #ffffff;
+  --text: #000000;
   --secondary-text: #999999;
 }
 
 body.simple-dark {
-  --second: #333333;
-  --flash: #000000;
-  --prime: #ffffff;
-  --bg: var(--second);
-  --text: var(--prime);
+  --bg: #000000;
+  --text: #ffffff;
   --secondary-text: #999999;
 }
 
@@ -58,7 +52,6 @@ textarea {
   font-family: inherit;
   font-size: inherit;
   padding: 0.4em;
-  margin: 0 0 0.5em 0;
   box-sizing: border-box;
   border: 1px solid #ccc;
   border-radius: 2px;
@@ -73,19 +66,3 @@ input[type='range'] {
   height: 0;
 }
 
-button {
-  color: var(--second);
-  background-color: var(--prime);
-  outline: none;
-  border-color: var(--second);
-}
-
-button:active {
-  background-color: var(--second);
-  color: var(--prime)
-}
-
-button:focus {
-  border-color: var(--flash);
-  background-color: var(--flash);
-}
