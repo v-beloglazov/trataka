@@ -1,13 +1,10 @@
 <script>
   import { onDestroy } from 'svelte';
 
-  import Play from './icons/Play.svelte';
-  import Pause from './icons/Pause.svelte';
-  import Reset from './icons/Reset.svelte';
-
   import { tratakaState } from './stores';
   import Praise from './Praise.svelte';
   import Settings from './Settings.svelte';
+  import Actions from './Actions.svelte';
 
   const HARE = 'Харе';
   const KRISHNA = 'Кришна';
@@ -96,7 +93,7 @@
   let finished = false;
   let paused = false;
 
-  tratakaState.subscribe((state) => {
+  const unsubscribe = tratakaState.subscribe((state) => {
     switch (state) {
       case tratakaState.inactive:
         inactive = true;
@@ -180,6 +177,7 @@
 
   onDestroy(() => {
     reset();
+    unsubscribe();
   });
 
   const rowLength = 2;
@@ -187,10 +185,6 @@
     const wordNum = wordInd + 1;
     return wordNum % rowLength === 0;
   }
-
-  const startButtonName = 'Старт';
-  const resetButtonName = 'Сброс';
-  const pauseButtonName = 'Пауза';
 
   const roundsLabel = 'Круги';
   const mantrasLabel = 'Мантры';
@@ -240,54 +234,8 @@
     font-weight: 500;
   }
 
-  /* @media (min-width: 360px) {
-    .mantra-card {
-      padding-left: 38px;
-    }
-  }
-
-  @media (min-width: 425px) {
-    .mantra-card {
-      padding-left: 58px;
-    }
-  } */
-
   .holy-name {
     transition: opacity 0.1s cubic-bezier(0.645, 0.045, 0.355, 1);
-  }
-
-  :global(.hidden) {
-    opacity: 0;
-  }
-
-  .actions {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-  }
-
-  .action-button {
-    padding: 0;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: inherit;
-  }
-
-  .action-button:last-child {
-    margin-right: 0;
-  }
-
-  :global(.action-button-icon) {
-    width: 48px;
-    height: 48px;
-    border-radius: 5px;
-  }
-
-  :global(.action-button-icon--reset) {
-    width: 36px;
-    height: 36px;
   }
 </style>
 
@@ -325,39 +273,5 @@
     <Settings bind:rounds bind:minutesForRound />
   {/if}
 
-  <div class="actions">
-    {#if paused || finished}
-      <button
-        class="action-button"
-        type="button"
-        on:click={reset}
-        title={resetButtonName}>
-        <span>
-          <Reset />
-        </span>
-      </button>
-    {/if}
-    {#if started}
-      <button
-        class="action-button"
-        type="button"
-        on:click={pause}
-        title={pauseButtonName}>
-        <span>
-          <Pause />
-        </span>
-      </button>
-    {/if}
-    {#if inactive || paused}
-      <button
-        class="action-button"
-        type="button"
-        on:click={start}
-        title={startButtonName}>
-        <span>
-          <Play />
-        </span>
-      </button>
-    {/if}
-  </div>
+  <Actions {start} {reset} {pause} />
 </main>
