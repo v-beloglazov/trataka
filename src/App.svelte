@@ -18,6 +18,8 @@
   import Reset from './icons/Reset.svelte';
   import Timer from './icons/Timer.svelte';
 
+  import { tratakaState } from './stores';
+
   const HARE = 'Харе';
   const KRISHNA = 'Кришна';
   const RAMA = 'Рама';
@@ -49,25 +51,38 @@
     0,
   );
 
-  const states = {
-    inactive: 'inactive',
-    started: 'started',
-    paused: 'paused',
-    finished: 'finished',
-  };
-
-  let tratakaState = states.inactive;
-  // $: console.log(tratakaState);
-
-  $: started = tratakaState === states.started;
-  $: paused = tratakaState === states.paused;
-  $: inactive = tratakaState === states.inactive;
-  $: finished = tratakaState === states.finished;
-
-  // $: mantraWords = inactive ? mahaMantra : [];
-
   let letterCounter = 0;
   let wordCounter = 0;
+  let mantraCounter = 107;
+  let roundCounter = 0;
+
+  let rounds = 1;
+  let minutesForRound = 10;
+
+  function handleCounters() {
+    const wordEnd = letterCounter === mahaMantra[wordCounter].length;
+    if (wordEnd) {
+      letterCounter = 0;
+      wordCounter += 1;
+    }
+    const mantraEnd = wordCounter === WORDS_IN_MANTRA;
+    if (mantraEnd) {
+      hideMantra();
+      wordCounter = 0;
+      mantraCounter += 1;
+    }
+    const roundEnd = mantraCounter === MANTRAS_IN_ROUND;
+    if (roundEnd) {
+      mantraCounter = 0;
+      roundCounter += 1;
+    }
+
+    if (roundCounter && roundCounter === rounds) {
+      finish();
+    }
+  }
+
+  $: handleCounters(letterCounter, wordCounter, mantraCounter, roundCounter);
 
   function hideWord(ind) {
     const wordElement = document.querySelector(`#hn-${ind}`);
@@ -79,19 +94,6 @@
     wordElement.classList.remove('hidden');
   }
 
-  function addWord() {
-    // mantraWords = [...mantraWords, mahaMantra[wordCounter]];
-
-    showWord(wordCounter);
-  }
-
-  function handleLetterTick() {
-    if (letterCounter === 0) {
-      addWord();
-    }
-    letterCounter += 1;
-  }
-
   function hideMantra() {
     mahaMantra.forEach((_, ind) => hideWord(ind));
   }
@@ -100,17 +102,56 @@
     mahaMantra.forEach((_, ind) => showWord(ind));
   }
 
+  let inactive = false;
+  let started = false;
+  let finished = false;
+  let paused = false;
+
+  tratakaState.subscribe((state) => {
+    switch (state) {
+      case tratakaState.inactive:
+        inactive = true;
+        started = false;
+        finished = false;
+        paused = false;
+        break;
+      case tratakaState.started:
+        started = true;
+        inactive = false;
+        finished = false;
+        paused = false;
+        break;
+      case tratakaState.finished:
+        finished = true;
+        inactive = false;
+        started = false;
+        paused = false;
+        break;
+      case tratakaState.paused:
+        paused = true;
+        started = false;
+        finished = false;
+        inactive = false;
+        break;
+      default:
+        break;
+    }
+  });
+
+  function handleLetterTick() {
+    if (letterCounter === 0) {
+      showWord(wordCounter);
+    }
+    letterCounter += 1;
+  }
+
   let mainIntervalId;
-
-  let rounds = 1;
-  let minutesForRound = 10;
-
   function start() {
-    if (tratakaState === states.inactive) {
+    if (inactive) {
       hideMantra();
     }
 
-    tratakaState = states.started;
+    tratakaState.start();
 
     const secondsForRound = minutesForRound * SECONDS_IN_MINUTE;
     const secondsForMantra = secondsForRound / MANTRAS_IN_ROUND;
@@ -123,57 +164,29 @@
   }
 
   function finish() {
-    tratakaState = states.finished;
+    tratakaState.finish();
     clearInterval(mainIntervalId);
     mainIntervalId = null;
   }
 
-  let mantraCounter = 0;
-  let roundCounter = 0;
-
-  function handleCounters() {
-    const wordEnd = letterCounter === mahaMantra[wordCounter].length;
-    if (wordEnd) {
-      letterCounter = 0;
-      wordCounter += 1;
-    }
-    const mantraEnd = wordCounter === WORDS_IN_MANTRA;
-    if (mantraEnd) {
-      // mantraWords = [];
-      hideMantra();
-      wordCounter = 0;
-      mantraCounter += 1;
-    }
-    const roundEnd = mantraCounter === MANTRAS_IN_ROUND;
-    if (roundEnd) {
-      mantraCounter = 0;
-      roundCounter += 1;
-    }
-  }
-
-  $: {
-    handleCounters(letterCounter, wordCounter, mantraCounter);
-    if (roundCounter && roundCounter === rounds) {
-      finish();
-      tratakaState = states.finished;
-    }
-  }
-
   function pause() {
-    tratakaState = states.paused;
+    tratakaState.pause();
     clearInterval(mainIntervalId);
     mainIntervalId = null;
   }
 
   function reset() {
-    showMantra();
-    tratakaState = states.inactive;
+    if (paused) {
+      showMantra();
+    }
+    tratakaState.reset();
     clearInterval(mainIntervalId);
     mainIntervalId = null;
+
+    letterCounter = 0;
     wordCounter = 0;
     mantraCounter = 0;
     roundCounter = 0;
-    letterCounter = 0;
   }
 
   onDestroy(() => {
