@@ -288,27 +288,19 @@
   }
 
   .settings {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     display: flex;
     justify-content: center;
+  }
+
+  .setting-field {
+    margin-bottom: 16px;
   }
 
   .actions {
     width: 100%;
     display: flex;
     justify-content: center;
-  }
-
-  .action-button {
-    cursor: pointer;
-    padding: 10px 15px;
-    margin-right: 1em;
-    border-radius: 6px;
-    text-transform: uppercase;
-  }
-
-  .action-button:hover {
-    border-color: #333;
   }
 
   .action-button:last-child {
@@ -369,7 +361,7 @@
   {#if paused || inactive}
     <div class="settings">
       <form>
-        <label for="rounds">
+        <label class="setting-field" for="rounds">
           {roundsInputLabel}:
           <input
             class="numeric-input"
@@ -380,7 +372,7 @@
             bind:value={rounds}
             min="1" />
         </label>
-        <label for="timeForRound">
+        <label class="setting-field" for="timeForRound">
           {timeForRoundInputLabel}:
           <input
             class="numeric-input"
