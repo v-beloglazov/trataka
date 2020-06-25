@@ -13,6 +13,11 @@
   import praiseImg11 from './images/praise/11.png';
   import praiseImg12 from './images/praise/12.png';
 
+  import Play from './icons/Play.svelte';
+  import Pause from './icons/Pause.svelte';
+  import Reset from './icons/Reset.svelte';
+  import Timer from './icons/Timer.svelte';
+
   const HARE = 'Харе';
   const KRISHNA = 'Кришна';
   const RAMA = 'Рама';
@@ -218,17 +223,19 @@
 
 <style>
   .main {
-    height: 100%;
-    max-height: 550px;
+    padding: 8px 0;
+    height: 540px;
     max-width: 400px;
     margin: auto;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
 
   .counters {
     display: flex;
     justify-content: flex-end;
+    margin-right: 8px;
   }
 
   .counter {
@@ -289,12 +296,36 @@
 
   .settings {
     margin-bottom: 24px;
+  }
+
+  .settings-form {
+    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
+    align-items: center;
   }
 
   .setting-field {
-    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .setting-field:last-child {
+    margin-bottom: 0;
+  }
+
+  .numeric-input {
+    margin: 0 6px;
+    min-width: 40px;
+    max-width: 50px;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #000000;
+    text-align: center;
+    background-color: inherit;
+    font-weight: 500;
+    font-size: 1.1em;
   }
 
   .actions {
@@ -303,20 +334,28 @@
     justify-content: center;
   }
 
+  .action-button {
+    padding: 0;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: inherit;
+  }
+
   .action-button:last-child {
     margin-right: 0;
   }
 
-  .numeric-input {
-    min-width: 40px;
-    max-width: 50px;
-    border: none;
-    border-radius: 0;
-    border-bottom: 1px solid var(--prime);
-    text-align: center;
-    background-color: inherit;
-    font-weight: 500;
-    font-size: 1.1em;
+  :global(.action-button-icon) {
+    width: 48px;
+    height: 48px;
+    border-radius: 5px;
+  }
+
+  :global(.action-button-icon--reset) {
+    width: 36px;
+    height: 36px;
   }
 </style>
 
@@ -360,7 +399,7 @@
 
   {#if paused || inactive}
     <div class="settings">
-      <form>
+      <form class="settings-form">
         <label class="setting-field" for="rounds">
           {roundsInputLabel}:
           <input
@@ -373,7 +412,10 @@
             min="1" />
         </label>
         <label class="setting-field" for="timeForRound">
-          {timeForRoundInputLabel}:
+          <span title={timeForRoundInputLabel}>
+            <Timer width="30px" height="30px" />
+          </span>
+          :
           <input
             class="numeric-input"
             id="timeForRound"
@@ -390,18 +432,36 @@
 
   <div class="actions">
     {#if paused || finished}
-      <button class="action-button" type="button" on:click={reset}>
-        {resetButtonName}
+      <button
+        class="action-button"
+        type="button"
+        on:click={reset}
+        title={resetButtonName}>
+        <span>
+          <Reset />
+        </span>
       </button>
     {/if}
     {#if started}
-      <button class="action-button" type="button" on:click={pause}>
-        {pauseButtonName}
+      <button
+        class="action-button"
+        type="button"
+        on:click={pause}
+        title={pauseButtonName}>
+        <span>
+          <Pause />
+        </span>
       </button>
     {/if}
     {#if inactive || paused}
-      <button class="action-button" type="button" on:click={start}>
-        {startButtonName}
+      <button
+        class="action-button"
+        type="button"
+        on:click={start}
+        title={startButtonName}>
+        <span>
+          <Play />
+        </span>
       </button>
     {/if}
   </div>
