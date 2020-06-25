@@ -67,3 +67,7 @@ input[type='range'] {
 button {
   cursor: pointer;
 }
+
+.svg-icon {
+  fill: var(--text)
+}

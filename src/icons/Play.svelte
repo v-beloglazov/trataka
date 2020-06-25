@@ -4,7 +4,7 @@
   fill="black"
   width="24px"
   height="24px"
-  class="action-button-icon">
+  class="action-button-icon svg-icon">
   <path d="M8 5v14l11-7z" />
   <path d="M0 0h24v24H0z" fill="none" />
 </svg>
