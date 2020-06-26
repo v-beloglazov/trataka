@@ -24,11 +24,6 @@
   .setting-field {
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .setting-field:last-child {
-    margin-bottom: 0;
   }
 
   .numeric-input {
