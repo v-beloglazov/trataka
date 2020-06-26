@@ -1,6 +1,6 @@
 node_modules
 public/build
-
+__sapper__
 .DS_Store
 
 *.log
