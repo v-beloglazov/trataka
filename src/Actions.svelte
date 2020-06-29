@@ -81,7 +81,7 @@
       type="button"
       on:click={reset}
       title={resetButtonName}>
-      <span>
+      <span class="icon-wrapper">
         <Reset />
       </span>
     </button>
@@ -92,7 +92,7 @@
       type="button"
       on:click={pause}
       title={pauseButtonName}>
-      <span>
+      <span class="icon-wrapper">
         <Pause />
       </span>
     </button>
@@ -103,7 +103,7 @@
       type="button"
       on:click={start}
       title={startButtonName}>
-      <span>
+      <span class="icon-wrapper">
         <Play />
       </span>
     </button>

@@ -19,11 +19,21 @@ body.simple-dark {
 body {
   margin: 0;
   box-sizing: border-box;
-  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  /* font-family: 'Roboto', Arial, Helvetica, sans-serif; */
+  /* font-family: 'Fira Sans Extra Condensed', sans-serif;  */
+  /* font-family: 'Forum', cursive; */
+  /* font-family: 'Lora', serif; */
+  /* font-family: 'Marmelad', sans-serif; */
+  font-family: 'Montserrat', sans-serif;
+  /* font-family: 'Noto Sans', sans-serif; */
+  /* font-family: 'Playfair Display', serif; */
+  /* font-family: 'PT Sans Narrow', sans-serif; */
+  /* font-family: 'Rubik', sans-serif; */
+  /* font-family: 'Ubuntu', sans-serif; */
   font-size: 16px;
   color: var(--text);
   background-color: var(--bg);
-  transition: color 0.2s ease-out, background-color 0.2s ease-out;
+  transition: color 0.2s ease-out, background-color 0.2s ease-out, font 0.2s ease-out;
 }
 
 a {
@@ -70,6 +80,10 @@ button {
 
 .hidden {
   opacity: 0;
+}
+
+.icon-wrapper {
+  display: flex;
 }
 
 .svg-icon {

@@ -54,7 +54,7 @@
         min="1" />
     </label>
     <label class="setting-field" for="timeForRound">
-      <span title={timeForRoundInputLabel}>
+      <span class="icon-wrapper" title={timeForRoundInputLabel}>
         <Timer width="30px" height="30px" />
       </span>
       :
