@@ -1,16 +1,16 @@
 <script>
-  import praiseImg1 from './images/praise/1.png';
-  import praiseImg2 from './images/praise/2.png';
-  import praiseImg3 from './images/praise/3.png';
-  import praiseImg4 from './images/praise/4.png';
-  import praiseImg5 from './images/praise/5.png';
-  import praiseImg6 from './images/praise/6.png';
-  import praiseImg7 from './images/praise/7.png';
-  import praiseImg8 from './images/praise/8.png';
-  import praiseImg9 from './images/praise/9.png';
-  import praiseImg10 from './images/praise/10.png';
-  import praiseImg11 from './images/praise/11.png';
-  import praiseImg12 from './images/praise/12.png';
+  const praiseImg1 = 'images/praise/1.png';
+  const praiseImg2 = 'images/praise/2.png';
+  const praiseImg3 = 'images/praise/3.png';
+  const praiseImg4 = 'images/praise/4.png';
+  const praiseImg5 = 'images/praise/5.png';
+  const praiseImg6 = 'images/praise/6.png';
+  const praiseImg7 = 'images/praise/7.png';
+  const praiseImg8 = 'images/praise/8.png';
+  const praiseImg9 = 'images/praise/9.png';
+  const praiseImg10 = 'images/praise/10.png';
+  const praiseImg11 = 'images/praise/11.png';
+  const praiseImg12 = 'images/praise/12.png';
 
   function getRandomInt(min, max) {
     const ceiledMin = Math.ceil(min);

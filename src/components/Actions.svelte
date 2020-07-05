@@ -1,7 +1,7 @@
 <script>
   import { onDestroy } from 'svelte';
 
-  import { tratakaState } from './stores';
+  import { tratakaState } from '../stores';
   import Play from './icons/Play.svelte';
   import Pause from './icons/Pause.svelte';
   import Reset from './icons/Reset.svelte';

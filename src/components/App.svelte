@@ -1,7 +1,7 @@
 <script>
   import { onDestroy } from 'svelte';
 
-  import { tratakaState } from './stores';
+  import { tratakaState } from '../stores';
   import Praise from './Praise.svelte';
   import Settings from './Settings.svelte';
   import Actions from './Actions.svelte';
