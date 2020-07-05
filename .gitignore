@@ -1,6 +1,6 @@
-node_modules
-public/build
-__sapper__
 .DS_Store
-
-*.log
+/node_modules/
+/src/node_modules/@sapper/
+yarn-error.log
+/cypress/screenshots/
+/__sapper__/
