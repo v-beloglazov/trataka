@@ -89,7 +89,7 @@
   }
 
   let inactive = false;
-  let started = false;
+  // let started = false;
   let finished = false;
   let paused = false;
 
@@ -97,12 +97,12 @@
     switch (state) {
       case tratakaState.inactive:
         inactive = true;
-        started = false;
+        // started = false;
         finished = false;
         paused = false;
         break;
       case tratakaState.started:
-        started = true;
+        // started = true;
         inactive = false;
         finished = false;
         paused = false;
@@ -110,12 +110,12 @@
       case tratakaState.finished:
         finished = true;
         inactive = false;
-        started = false;
+        // started = false;
         paused = false;
         break;
       case tratakaState.paused:
         paused = true;
-        started = false;
+        // started = false;
         finished = false;
         inactive = false;
         break;
